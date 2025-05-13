@@ -27,11 +27,10 @@
           gotools
           cmake
           gcc
-          stdenv.cc.cc.lib # Explicitly include libstdc++.so.6
+          stdenv.cc.cc.lib
           golangci-lint
         ];
 
-        # Ensure LD_LIBRARY_PATH includes GCC libraries
         shellHook = ''
           export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
         '';
