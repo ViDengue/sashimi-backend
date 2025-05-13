@@ -1,7 +1,7 @@
 {
   description = "A Nix-flake-based Go 1.22 development environment";
 
-  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   outputs = inputs: let
     goVersion = 23;
@@ -27,14 +27,14 @@
           gotools
           cmake
           gcc
-
+          stdenv.cc.cc.lib # Explicitly include libstdc++.so.6
           golangci-lint
         ];
-      };
-      environment = {
-        sessionVariables = {
-          LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
-        };
+
+        # Ensure LD_LIBRARY_PATH includes GCC libraries
+        shellHook = ''
+          export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        '';
       };
     });
   };

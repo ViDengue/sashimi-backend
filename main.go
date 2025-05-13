@@ -16,13 +16,13 @@ import (
 )
 
 var ChromaClient chroma.Client
-var embedderEndpoint = "http://embedder:5005/embed"
+var embedderEndpoint = "http://localhost:5005/embed"
 
 func main() {
 
 	chromaEndpoint, ok := os.LookupEnv("CHROMA_ENDPOINT")
 	if !ok {
-		chromaEndpoint = "chromadb:8000"
+		chromaEndpoint = "localhost:8000"
 	}
 
 	ChromaClient, err := chroma.NewHTTPClient(
@@ -61,7 +61,6 @@ type CreateTextAsEmbeddingRequest struct {
 }
 
 func CreateTextAsEmbedding(e *core.RequestEvent) error {
-
 	data := CreateTextAsEmbeddingRequest{}
 
 	if err := e.BindBody(&data); err != nil {
