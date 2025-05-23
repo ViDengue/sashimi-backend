@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - "8090:8090"
+    command: --dir "/pb/pb_data" --http "0.0.0.0:8090"
+    depends_on:
+      chromadb:
+        condition: service_healthy
+    volumes:
+      - "./data/pocketbase:/pb/pb_data"
+    environment:
+      - "CHROMA_ENDPOINT=http://chromadb:8000"
+    env_file: ".env"
+  chromadb:
+    image: chromadb/chroma
+    container_name: chromadb
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "/bin/bash", "-c", "cat < /dev/null > /dev/tcp/localhost/8000"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
