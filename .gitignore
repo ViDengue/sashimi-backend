@@ -1,2 +1,4 @@
 .direnv
+pb_data/
 main
+.env
