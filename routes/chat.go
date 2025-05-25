@@ -47,7 +47,9 @@ func handleChatRequest(_ *core.ServeEvent, llm *llms.Model) handlerFunc {
 			return e.Stream(http.StatusOK, "text/plain", r)
 		*/
 
-		completion, err := llms.GenerateFromSinglePrompt(ctx, *llm, data.Prompt)
+		prompt := "Answer the question in the following format: Goal, Why It Matters, Action Steps, Key Risks & Solutions, How to Measure Success. Question: " + data.Prompt
+
+		completion, err := llms.GenerateFromSinglePrompt(ctx, *llm, prompt, llms.WithMaxTokens(1000))
 
 		if err != nil {
 			fmt.Printf("Error: %s\n", err)
